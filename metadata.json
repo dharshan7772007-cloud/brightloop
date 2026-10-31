@@ -1,0 +1,6 @@
+{
+  "name": "SUBSCRIPTO AI – Smart Subscription Management Platform",
+  "description": "Intelligent subscription and recurring billing management platform with real-time analytics, automated renewal tracking, customer lifecycle, and Gemini AI business assistant.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

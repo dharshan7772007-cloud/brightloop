@@ -1,0 +1,204 @@
+{
+  "entities": {
+    "Customer": {
+      "title": "Customer",
+      "description": "Represents a business customer subscribing to services",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 20 },
+        "company": { "type": "string", "maxLength": 100 },
+        "address": { "type": "string", "maxLength": 255 },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "notes": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["name", "email", "status"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Subscription product offering",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "maxLength": 500 },
+        "category": { "type": "string", "maxLength": 50 },
+        "price": { "type": "number" },
+        "status": { "type": "string", "enum": ["active", "archived"] },
+        "features": { "type": "array" },
+        "variants": { "type": "array" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["name", "price", "status"]
+    },
+    "Plan": {
+      "title": "Plan",
+      "description": "Billing plan with duration and pricing",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "maxLength": 500 },
+        "productId": { "type": "string", "maxLength": 128 },
+        "productName": { "type": "string", "maxLength": 100 },
+        "frequency": { "type": "string", "enum": ["monthly", "quarterly", "yearly"] },
+        "price": { "type": "number" },
+        "currency": { "type": "string", "maxLength": 5 },
+        "trialDays": { "type": "number" },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["name", "productId", "frequency", "price", "status"]
+    },
+    "Subscription": {
+      "title": "Subscription",
+      "description": "Customer active or recurring subscription instance",
+      "type": "object",
+      "properties": {
+        "subscriptionNumber": { "type": "string", "maxLength": 50 },
+        "customerId": { "type": "string", "maxLength": 128 },
+        "customerName": { "type": "string", "maxLength": 100 },
+        "customerEmail": { "type": "string", "maxLength": 120 },
+        "productId": { "type": "string", "maxLength": 128 },
+        "productName": { "type": "string", "maxLength": 100 },
+        "planId": { "type": "string", "maxLength": 128 },
+        "planName": { "type": "string", "maxLength": 100 },
+        "frequency": { "type": "string", "enum": ["monthly", "quarterly", "yearly"] },
+        "amount": { "type": "number" },
+        "status": { "type": "string", "enum": ["active", "pending", "paused", "cancelled", "expired"] },
+        "startDate": { "type": "string" },
+        "currentPeriodStart": { "type": "string" },
+        "currentPeriodEnd": { "type": "string" },
+        "renewalDate": { "type": "string" },
+        "discountCode": { "type": "string", "maxLength": 50 },
+        "discountAmount": { "type": "number" },
+        "autoRenew": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["subscriptionNumber", "customerId", "productId", "planId", "status", "amount"]
+    },
+    "Invoice": {
+      "title": "Invoice",
+      "description": "Recurring billing invoice for subscription",
+      "type": "object",
+      "properties": {
+        "invoiceNumber": { "type": "string", "maxLength": 50 },
+        "subscriptionId": { "type": "string", "maxLength": 128 },
+        "customerId": { "type": "string", "maxLength": 128 },
+        "customerName": { "type": "string", "maxLength": 100 },
+        "customerEmail": { "type": "string", "maxLength": 120 },
+        "billingPeriodStart": { "type": "string" },
+        "billingPeriodEnd": { "type": "string" },
+        "issueDate": { "type": "string" },
+        "dueDate": { "type": "string" },
+        "subtotal": { "type": "number" },
+        "discountAmount": { "type": "number" },
+        "discountCode": { "type": "string", "maxLength": 50 },
+        "taxRate": { "type": "number" },
+        "taxAmount": { "type": "number" },
+        "totalAmount": { "type": "number" },
+        "status": { "type": "string", "enum": ["paid", "unpaid", "overdue"] },
+        "notes": { "type": "string", "maxLength": 500 },
+        "paidAt": { "type": "string" },
+        "paymentMethod": { "type": "string", "maxLength": 50 },
+        "paymentReferenceId": { "type": "string", "maxLength": 100 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["invoiceNumber", "customerId", "subtotal", "totalAmount", "status"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "Payment transaction record",
+      "type": "object",
+      "properties": {
+        "paymentNumber": { "type": "string", "maxLength": 50 },
+        "invoiceId": { "type": "string", "maxLength": 128 },
+        "invoiceNumber": { "type": "string", "maxLength": 50 },
+        "customerId": { "type": "string", "maxLength": 128 },
+        "customerName": { "type": "string", "maxLength": 100 },
+        "amount": { "type": "number" },
+        "currency": { "type": "string", "maxLength": 5 },
+        "method": { "type": "string", "enum": ["upi", "card", "net_banking", "cash"] },
+        "referenceId": { "type": "string", "maxLength": 100 },
+        "status": { "type": "string", "enum": ["completed", "pending", "failed"] },
+        "isSimulated": { "type": "boolean" },
+        "paidAt": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["paymentNumber", "invoiceId", "amount", "method", "referenceId", "status"]
+    },
+    "Discount": {
+      "title": "Discount",
+      "description": "Coupon and promotional discount rules",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string", "maxLength": 50 },
+        "name": { "type": "string", "maxLength": 100 },
+        "type": { "type": "string", "enum": ["percentage", "fixed"] },
+        "value": { "type": "number" },
+        "minInvoiceAmount": { "type": "number" },
+        "maxDiscountAmount": { "type": "number" },
+        "startDate": { "type": "string" },
+        "expiryDate": { "type": "string" },
+        "usageLimit": { "type": "number" },
+        "usedCount": { "type": "number" },
+        "status": { "type": "string", "enum": ["active", "inactive", "expired"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["code", "name", "type", "value", "status"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "In-app alerts and notifications",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 120 },
+        "message": { "type": "string", "maxLength": 500 },
+        "type": { "type": "string", "enum": ["renewal", "invoice", "payment", "system"] },
+        "read": { "type": "boolean" },
+        "link": { "type": "string", "maxLength": 200 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["title", "message", "type", "read"]
+    }
+  },
+  "firestore": {
+    "/customers/{customerId}": {
+      "schema": "Customer",
+      "description": "Business customers"
+    },
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "SaaS and subscription products"
+    },
+    "/plans/{planId}": {
+      "schema": "Plan",
+      "description": "Subscription plans"
+    },
+    "/subscriptions/{subscriptionId}": {
+      "schema": "Subscription",
+      "description": "Customer subscriptions"
+    },
+    "/invoices/{invoiceId}": {
+      "schema": "Invoice",
+      "description": "Subscription invoices"
+    },
+    "/payments/{paymentId}": {
+      "schema": "Payment",
+      "description": "Payment receipts"
+    },
+    "/discounts/{discountId}": {
+      "schema": "Discount",
+      "description": "Discount coupons"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "System and renewal alerts"
+    }
+  }
+}

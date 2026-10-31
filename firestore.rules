@@ -1,0 +1,102 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global safety net - default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isBootstrappedAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'dharshan7772007@gmail.com' ||
+        (request.auth.token.keys().hasAll(['email']) && request.auth.token.email.size() > 0)
+      );
+    }
+
+    // Customers collection
+    match /customers/{customerId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && isValidId(customerId);
+      allow delete: if isSignedIn() && isValidId(customerId);
+    }
+
+    // Products collection
+    match /products/{productId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && isValidId(productId);
+      allow delete: if isSignedIn() && isValidId(productId);
+    }
+
+    // Plans collection
+    match /plans/{planId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && isValidId(planId);
+      allow delete: if isSignedIn() && isValidId(planId);
+    }
+
+    // Subscriptions collection
+    match /subscriptions/{subscriptionId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && isValidId(subscriptionId);
+      allow delete: if isSignedIn() && isValidId(subscriptionId);
+    }
+
+    // Invoices collection
+    match /invoices/{invoiceId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && isValidId(invoiceId);
+      allow delete: if isSignedIn() && isValidId(invoiceId);
+    }
+
+    // Payments collection
+    match /payments/{paymentId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && isValidId(paymentId);
+      allow delete: if isSignedIn() && isValidId(paymentId);
+    }
+
+    // Discounts collection
+    match /discounts/{discountId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && isValidId(discountId);
+      allow delete: if isSignedIn() && isValidId(discountId);
+    }
+
+    // Notifications collection
+    match /notifications/{notificationId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && isValidId(notificationId);
+      allow delete: if isSignedIn() && isValidId(notificationId);
+    }
+
+    // Users collection
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && request.auth.uid == userId;
+      allow delete: if false;
+    }
+
+    // Activity logs
+    match /activity_logs/{logId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(logId);
+      allow update, delete: if false;
+    }
+
+    // Test connection endpoint
+    match /test/{testId} {
+      allow read, write: if isSignedIn();
+    }
+  }
+}
